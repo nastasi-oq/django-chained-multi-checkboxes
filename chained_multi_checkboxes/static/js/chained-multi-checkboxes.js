@@ -8,6 +8,7 @@
                 // we set the dropdown to the first group with a selected checkbox (or to the first otherwise)
                 var first_group = _bignumber;
                 
+                // for each chained-checkbox ...
                 for (var idx = 0 ; idx < _bignumber ; idx++) {
                     if ($(this).attr('chained-checkbox_id'+idx) == undefined) {
                         break;
@@ -17,19 +18,20 @@
                         chained_id = chained_id.replace('__prefix__', $(this).attr('name').split('-')[1]);
                         $(this).attr('chained-checkbox_id'+idx, chained_id);
                     }
-                    for (var cb_idx = 0 ; cb_idx < _bignumber ; cb_idx++) {
+                    var cb_idx;
+                    for (cb_idx = 0 ; cb_idx < _bignumber ; cb_idx++) {
                         var cb = $('#'+chained_id+'_'+cb_idx);
-                        if (cb.length != 1) 
+                        if (cb.length != 1)
                             break;
-                        if ($(cb[0]).is(':checked')) {
+                        if ($(cb).is(':checked')) {
                             var ul = $(cb[0]).parents("ul");
                             if (ul.length != 1)
                                 continue;
                             var group_id = $(ul[0]).attr("id");
                             
-                            if (group_id.indexOf('__group_') == -1) 
+                            if (group_id.indexOf('__group_') == -1 && group_id.indexOf('__hiddengroup_') == -1)
                                 continue;
-                            
+
                             var group_idx = group_id.substring(group_id.lastIndexOf("_") + 1);
 
                             if (first_group > group_idx)
@@ -38,7 +40,7 @@
                         }
                     }
                 }
-                if (first_group == 10240)
+                if (first_group == _bignumber)
                     first_group = 1;
                 
                 $(this).val(first_group);
@@ -54,12 +56,54 @@
                     $(this).attr('chained-checkbox_id'+idx, chained_id);
                 }
 
-                for (var group_idx = 1 ; group_idx < 10240 ; group_idx++) {
-                    var group = $("#" + chained_id + "__group_" + group_idx);
+                // if an hiddengroup element is selected select the related checkbox and
+                // deselect all other checkboxes items
+                var hiddengroup = $("#" + chained_id + "__hiddengroup_" + $(this).val());
                     
-                    if (group.length != 1)
+                if (hiddengroup.length == 1) {
+                    var item = hiddengroup.find("input");
+
+                    if (item.length == 1) {
+                        for (var cb_idx = 0 ; cb_idx < _bignumber ; cb_idx++) {
+                            var cb = $('#'+chained_id+'_'+cb_idx);
+                            if (cb.length != 1)
+                                break;
+                            cb.removeAttr('checked');
+                        }
+
+                        item.attr('checked','checked');
+                    }
+                }
+                else { // if hiddengroup isn't selected all hiddengroups items must be deselected
+                    for (var group_idx = 1 ; group_idx < _bignumber ; group_idx++) {
+                        var group = $("#" + chained_id + "__group_" + group_idx);
+                        if (group.length == 1)
+                            continue;
+
+                        var hiddengroup = $("#" + chained_id + "__hiddengroup_" + group_idx);
+                        if (hiddengroup.length == 1) {
+                            var item = hiddengroup.find("input");
+                            item.removeAttr('checked');
+                            continue;
+                        }
                         break;
-                    group[0].style.display = (group_idx == $(this).val() ? '' : 'none');
+                    }
+                }
+
+                // set visibility of the proper group (if isn't an hiddengroup)
+                for (var group_idx = 1 ; group_idx < _bignumber ; group_idx++) {
+                    var group = $("#" + chained_id + "__group_" + group_idx);
+
+                    if (group.length == 1) {
+                        $(group).css("display", (group_idx == $(this).val() ? '' : 'none'));
+                        continue;
+                    }
+
+                    var hiddengroup = $("#" + chained_id + "__hiddengroup_" + group_idx);
+                    if (hiddengroup.length == 1)
+                        continue;
+
+                    break;
                 }
             }
         };
