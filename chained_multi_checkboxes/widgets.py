@@ -34,14 +34,25 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
 
         # Normalize to strings
         str_values = set([force_text(v) for v in value])
-        last_taste=-1
-        for i, (option_value, option_label, option_taste) in enumerate(chain(self.choices, choices)):
-            if last_taste != option_taste:
-                if last_taste != -1:
+        last_group = -1
+        output_group = []
+        is_visible_group = False
+        for i, (option_value, option_label, option_group, option_is_visible) in enumerate(chain(self.choices, choices, ((-1, "noval", -1, False), ) )):
+            if last_group != option_group:
+                if last_group != -1:
+                    if is_visible_group:
+                        output.append(format_html("<ul id='%s__group_%d' style='display: none;'>" % (attrs['id'], last_group)))
+                    else:
+                        output.append(format_html("<ul id='%s__hiddengroup_%d' style='display: none;'>" % (attrs['id'], last_group)))
+                    output += output_group
+                    output_group = []
+                    is_visible_group = False
                     output.append(format_html("</ul>"))
-                output.append(format_html("<ul id='%s__group_%d' style='display: none;'>" % (attrs['id'], option_taste)))
-                last_taste = option_taste
 
+                last_group = option_group
+
+            if option_is_visible:
+                is_visible_group = True
             # If an ID attribute was given, add a numeric index as a suffix,
             # so that the checkboxes don't all have the same ID attribute.
             if has_id:
@@ -54,9 +65,8 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
             option_value = force_text(option_value)
             rendered_cb = cb.render(name, option_value)
             option_label = force_text(option_label)
-            output.append(format_html('<li><label{0}>{1} {2}</label></li>',
+            output_group.append(format_html('<li><label{0}>{1} {2}</label></li>',
                                       label_for, rendered_cb, option_label))
-        output.append('</ul>')
 
         js = """
         <script type="text/javascript">

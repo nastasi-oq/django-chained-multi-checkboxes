@@ -21,8 +21,8 @@ class ChainedModelChoiceIterator(ModelChoiceIterator):
 
 
     def choice(self, obj):
-        # TODO: from .taste to a dynamic field
-        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), obj.taste)
+        # TODO: from .group to a dynamic field
+        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), obj.group, obj.is_visible)
 
 class ModelChainedMultipleChoiceField(forms.ModelMultipleChoiceField):
 
