@@ -5,24 +5,27 @@ from django.forms.models import ChoiceField, ModelChoiceIterator
 import widgets as example_widgets
 
 class ChainedModelChoiceIterator(ModelChoiceIterator):
+    def __init__(self, *args, **kwargs):
+        self.parent_field = args[0].parent_field
+        super(ChainedModelChoiceIterator, self).__init__(*args, **kwargs)
+
     def __iter__(self):
         if self.field.empty_label is not None:
             yield ("", self.field.empty_label)
         if self.field.cache_choices:
             if self.field.choice_cache is None:
                 self.field.choice_cache = [
-                    self.choice(obj) for obj in self.queryset.order_by('group')
+                    self.choice(obj) for obj in self.queryset.order_by(self.parent_field)
                 ]
             for choice in self.field.choice_cache:
                 yield choice
         else:
-            for obj in self.queryset.order_by('group'):
+            for obj in self.queryset.order_by(self.parent_field):
                 yield self.choice(obj)
 
 
     def choice(self, obj):
-        # TODO: from .group to a dynamic field
-        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), obj.group, obj.is_visible)
+        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), getattr(obj, self.parent_field), obj.is_visible)
 
 class ModelChainedMultipleChoiceField(forms.ModelMultipleChoiceField):
 
