@@ -42,6 +42,12 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
                 if last_group != -1:
                     if is_visible_group:
                         output.append(format_html("<ul id='%s__group_%d' style='display: none;'>" % (attrs['id'], last_group)))
+                        final_attrs_all = self.build_attrs(onChange="$=django.jQuery ; if ($(this).is(':checked')) { $($(this).parents()[1]).siblings().find('input').attr('checked','checked'); } else { $($(this).parents()[1]).siblings().find('input').removeAttr('checked'); }")
+                        cb_all = CheckboxInput(final_attrs_all)
+                        rendered_cb_all = cb_all.render("ALL", False)
+                        option_label_all = "ALL"
+                        output.append(format_html('<li><label{0}>{1} {2}</label></li>',
+                                      '', rendered_cb_all, option_label_all))
                     else:
                         output.append(format_html("<ul id='%s__hiddengroup_%d' style='display: none;'>" % (attrs['id'], last_group)))
                     output += output_group
