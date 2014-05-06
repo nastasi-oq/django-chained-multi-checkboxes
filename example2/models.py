@@ -26,8 +26,6 @@ TASTES = (
 )
 
 class Ingredient(models.Model):
-    class Meta:
-        ordering = ['group']
     name = models.CharField(max_length=255 )
     group = models.IntegerField("Taste", choices=TASTES)
     is_visible = models.BooleanField(default=True)

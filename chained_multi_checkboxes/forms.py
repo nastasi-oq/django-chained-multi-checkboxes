@@ -11,12 +11,12 @@ class ChainedModelChoiceIterator(ModelChoiceIterator):
         if self.field.cache_choices:
             if self.field.choice_cache is None:
                 self.field.choice_cache = [
-                    self.choice(obj) for obj in self.queryset.all()
+                    self.choice(obj) for obj in self.queryset.order_by('group')
                 ]
             for choice in self.field.choice_cache:
                 yield choice
         else:
-            for obj in self.queryset.all():
+            for obj in self.queryset.order_by('group'):
                 yield self.choice(obj)
 
 
