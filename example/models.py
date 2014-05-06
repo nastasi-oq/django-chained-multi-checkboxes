@@ -1,6 +1,7 @@
 from django.db import models
 
 TASTES = (
+    ('', '--------'),
     (1, 'Salt'),
     (2, 'Sweet'),
     (3, 'Bitter'),

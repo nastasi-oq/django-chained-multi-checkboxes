@@ -15,3 +15,4 @@ class RecipeForm(ModelForm):
     group = ChoiceField(choices=TASTES)
 
     ingredients = ModelChainedMultipleChoiceField(parent_field='group', queryset=Ingredient.objects.all(), widget=ChainedCheckboxSelectMultiple('group'), required=False)
+

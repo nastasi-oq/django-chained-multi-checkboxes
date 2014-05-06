@@ -40,8 +40,9 @@
                         }
                     }
                 }
-                if (first_group == _bignumber)
-                    first_group = 1;
+                if (first_group == _bignumber) {
+                    first_group = "";
+                }
                 
                 $(this).val(first_group);
             }
