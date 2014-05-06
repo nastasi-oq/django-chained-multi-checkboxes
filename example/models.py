@@ -14,7 +14,7 @@ TASTES = (
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=255 )
-    group = models.IntegerField("Taste", choices=TASTES)
+    taste = models.IntegerField(choices=TASTES)
     is_visible = models.BooleanField(default=True)
     
     def __unicode__(self):

@@ -30,6 +30,8 @@ class ChainedModelChoiceIterator(ModelChoiceIterator):
 class ModelChainedMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def __init__(self, parent_field, *args, **kwargs):
+        if not 'widget' in kwargs:
+            kwargs['widget'] = ChainedCheckboxSelectMultiple(parent_field)
         self.parent_field = parent_field
         super(ModelChainedMultipleChoiceField, self).__init__(*args, **kwargs)
 

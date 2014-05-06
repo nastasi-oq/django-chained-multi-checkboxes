@@ -3,7 +3,7 @@
     "pk": 1,
     "model": "example.ingredient",
     "fields": {
-        "group": 1,
+        "taste": 1,
         "name": "Shrimp",
         "is_visible": true
     }
@@ -12,7 +12,7 @@
     "pk": 2,
     "model": "example.ingredient",
     "fields": {
-        "group": 2,
+        "taste": 2,
         "name": "Sugar",
         "is_visible": true
 
@@ -22,7 +22,7 @@
     "pk": 3,
     "model": "example.ingredient",
     "fields": {
-        "group": 3,
+        "taste": 3,
         "name": "Cicoria",
         "is_visible": true
 
@@ -32,7 +32,7 @@
     "pk": 4,
     "model": "example.ingredient",
     "fields": {
-        "group": 3,
+        "taste": 3,
         "name": "Trevisana",
         "is_visible": true
 
@@ -42,7 +42,7 @@
     "pk": 5,
     "model": "example.ingredient",
     "fields": {
-        "group": 4,
+        "taste": 4,
         "name": "Lemon",
         "is_visible": true
 
@@ -52,7 +52,7 @@
     "pk": 6,
     "model": "example.ingredient",
     "fields": {
-        "group": 4,
+        "taste": 4,
         "name": "Orange",
         "is_visible": true
 
@@ -62,7 +62,7 @@
     "pk": 7,
     "model": "example.ingredient",
     "fields": {
-        "group": 5,
+        "taste": 5,
         "name": "Seaweed",
         "is_visible": true
 
@@ -72,7 +72,7 @@
     "pk": 8,
     "model": "example.ingredient",
     "fields": {
-        "group": 6,
+        "taste": 6,
         "name": "Fat",
         "is_visible": true
 
@@ -82,7 +82,7 @@
     "pk": 9,
     "model": "example.ingredient",
     "fields": {
-        "group": 7,
+        "taste": 7,
         "name": "Ghost-taste",
         "is_visible": false
 
@@ -92,7 +92,7 @@
     "pk": 10,
     "model": "example.ingredient",
     "fields": {
-        "group": 8,
+        "taste": 8,
         "name": "Virtual-taste",
         "is_visible": false
 
