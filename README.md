@@ -8,7 +8,9 @@ USAGE
 From application forms.py:
 
 ```python
-  ingredients = ModelChainedMultipleChoiceField(parent_field='group', queryset=Ingredient.objects.all(), required=False)
+  ingredients = ModelChainedMultipleChoiceField(parent_field='group',
+                                                queryset=Ingredient.objects.all(),
+                                                required=False)
 ```
 
 TODO
