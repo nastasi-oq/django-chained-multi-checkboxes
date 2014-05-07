@@ -1,6 +1,6 @@
 from django import forms
-from django.forms import ModelForm
 from django.forms.models import ChoiceField, ModelChoiceIterator
+from chained_multi_checkboxes.widgets import ChainedCheckboxSelectMultiple
 
 import widgets as example_widgets
 
