@@ -27,6 +27,6 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    package_data={'chained_multi_checkboxes' : ['static/admin/js/*.js']},
+    package_data={'chained_multi_checkboxes' : ['static/js/*.js']},
 )
 
