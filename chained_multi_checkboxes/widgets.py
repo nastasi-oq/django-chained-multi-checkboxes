@@ -8,7 +8,6 @@ from itertools import chain
 
 class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
     def __init__(self, parent_field=None, order_fields=None, item_index=None, *args, **kwargs):
-        print "PARENT: ", parent_field
         self.parent_field = parent_field
         self.order_fields = order_fields
         self.item_index = 0
@@ -43,12 +42,12 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
                 if last_group != -1:
                     if is_visible_group:
                         output.append(format_html("<ul id='%s__group_%d' style='display: none;'>" % (attrs['id'], last_group)))
-                        final_attrs_all = self.build_attrs(onChange="$=django.jQuery ; if ($(this).is(':checked')) { $($(this).parents()[1]).siblings().find('input').attr('checked','checked'); } else { $($(this).parents()[1]).siblings().find('input').removeAttr('checked'); }")
-                        cb_all = CheckboxInput(final_attrs_all)
-                        rendered_cb_all = cb_all.render("ALL", False)
-                        option_label_all = "ALL"
-                        output.append(format_html('<li><label{0}>{1} {2}</label></li>',
-                                      '', rendered_cb_all, option_label_all))
+                        output.append("<input value='Select all' type='button' is_active='0' "
+                                      "onclick='$=django.jQuery; if ($(this).attr(\"is_active\") == \"0\") { "
+                                      "$(this).siblings().find(\"input\").attr(\"checked\",\"checked\"); "
+                                      "$(this).val(\"Deselect all\"); $(this).attr(\"is_active\", \"1\"); } else { "
+                                      "$(this).siblings().find(\"input\").removeAttr(\"checked\"); "
+                                      "$(this).val(\"Select all\"); $(this).attr(\"is_active\", \"0\"); }'/>")
                     else:
                         output.append(format_html("<ul id='%s__hiddengroup_%d' style='display: none;'>" % (attrs['id'], last_group)))
                     output += output_group
