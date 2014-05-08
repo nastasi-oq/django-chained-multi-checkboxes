@@ -9,9 +9,9 @@ class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         # fields is required to impose the correct visualization order
-        fields = ('name', 'group', 'ingredients')
+        fields = ('name', 'form_taste', 'ingredients')
 
-    group = ChoiceField(choices=TASTES)
+    form_taste = ChoiceField(choices=TASTES)
 
-    ingredients = ModelChainedMultipleChoiceField(parent_field='group', queryset=Ingredient.objects.all(), required=False)
+    ingredients = ModelChainedMultipleChoiceField(parent_field='form_taste', order_fields=('taste', 'name'), queryset=Ingredient.objects.all(), required=False)
 

@@ -7,6 +7,7 @@ import widgets as example_widgets
 class ChainedModelChoiceIterator(ModelChoiceIterator):
     def __init__(self, *args, **kwargs):
         self.parent_field = args[0].parent_field
+        self.order_fields = args[0].order_fields
         super(ChainedModelChoiceIterator, self).__init__(*args, **kwargs)
 
     def __iter__(self):
@@ -15,24 +16,25 @@ class ChainedModelChoiceIterator(ModelChoiceIterator):
         if self.field.cache_choices:
             if self.field.choice_cache is None:
                 self.field.choice_cache = [
-                    self.choice(obj) for obj in self.queryset.order_by(self.parent_field)
+                    self.choice(obj) for obj in self.queryset.order_by(*self.order_fields)
                 ]
             for choice in self.field.choice_cache:
                 yield choice
         else:
-            for obj in self.queryset.order_by(self.parent_field):
+            for obj in self.queryset.order_by(*self.order_fields):
                 yield self.choice(obj)
 
 
     def choice(self, obj):
-        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), getattr(obj, self.parent_field), obj.is_visible)
+        return (self.field.prepare_value(obj), self.field.label_from_instance(obj), getattr(obj, self.order_fields[0]), obj.is_visible)
 
 class ModelChainedMultipleChoiceField(forms.ModelMultipleChoiceField):
 
-    def __init__(self, parent_field, *args, **kwargs):
+    def __init__(self, parent_field, order_fields, *args, **kwargs):
         if not 'widget' in kwargs:
-            kwargs['widget'] = ChainedCheckboxSelectMultiple(parent_field)
+            kwargs['widget'] = ChainedCheckboxSelectMultiple(parent_field, order_fields)
         self.parent_field = parent_field
+        self.order_fields = order_fields
         super(ModelChainedMultipleChoiceField, self).__init__(*args, **kwargs)
 
     # override ModelMultipleChoiceField ->  ModelChoiceField :: _get_choices

@@ -7,9 +7,10 @@ from django.utils.html import format_html
 from itertools import chain
 
 class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
-    def __init__(self, parent_field=None, item_index=None, *args, **kwargs):
+    def __init__(self, parent_field=None, order_fields=None, item_index=None, *args, **kwargs):
         print "PARENT: ", parent_field
         self.parent_field = parent_field
+        self.order_fields = order_fields
         self.item_index = 0
         if item_index:
             self.item_index = item_index
