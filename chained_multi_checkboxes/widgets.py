@@ -32,6 +32,10 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
         else:
             paretnfield_id = field_prefix + self.parent_field
 
+        if self.item_index == 0:
+            final_attrs = dict(final_attrs, onClick="$=django.jQuery; $.fn.setChainedMultiCheckboxesCounter($('#%(paretnfield_id)s'));"
+                               % { 'paretnfield_id':paretnfield_id })
+
         # Normalize to strings
         str_values = set([force_text(v) for v in value])
         last_group = -1
@@ -42,12 +46,14 @@ class ChainedCheckboxSelectMultiple(CheckboxSelectMultiple):
                 if last_group != -1:
                     if is_visible_group:
                         output.append(format_html("<ul id='%s__group_%d' style='display: none;'>" % (attrs['id'], last_group)))
-                        output.append("<input value='Select all' type='button' is_active='0' "
-                                      "onclick='$=django.jQuery; if ($(this).attr(\"is_active\") == \"0\") { "
-                                      "$(this).siblings().find(\"input\").attr(\"checked\",\"checked\"); "
-                                      "$(this).val(\"Deselect all\"); $(this).attr(\"is_active\", \"1\"); } else { "
-                                      "$(this).siblings().find(\"input\").removeAttr(\"checked\"); "
-                                      "$(this).val(\"Select all\"); $(this).attr(\"is_active\", \"0\"); }'/>")
+                        output.append("""<input value='Select all' type='button' is_active='0'
+                                      onclick='$=django.jQuery; if ($(this).attr("is_active") == "0") {
+                                      $(this).siblings().find("input").attr("checked","checked");
+                                      $(this).val("Deselect all"); $(this).attr("is_active", "1"); } else {
+                                      $(this).siblings().find("input").removeAttr("checked");
+                                      $(this).val("Select all"); $(this).attr("is_active", "0"); }
+                                      $.fn.setChainedMultiCheckboxesCounter($("#%(paretnfield_id)s"));'
+                                      />""" % { 'paretnfield_id':paretnfield_id })
                     else:
                         output.append(format_html("<ul id='%s__hiddengroup_%d' style='display: none;'>" % (attrs['id'], last_group)))
                     output += output_group
